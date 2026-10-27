@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 
 class LoginActivity : AppCompatActivity() {
 
@@ -43,6 +44,10 @@ class LoginActivity : AppCompatActivity() {
                 else -> {
                     tvStatus.setTextColor(Color.parseColor("#2E7D32"))
                     tvStatus.text = "Xác thực thành công!"
+
+                    val intent = Intent(this, ProfileActivity::class.java)
+                    intent.putExtra("EXTRA_EMAIL", email)
+                    startActivity(intent)
                 }
             }
         }
