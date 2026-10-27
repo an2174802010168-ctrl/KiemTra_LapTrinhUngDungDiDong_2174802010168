@@ -1,47 +1,55 @@
 package vn.edu.vlu.kiemtra_laptrinhungdungdidong_2174802010168
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import vn.edu.vlu.kiemtra_laptrinhungdungdidong_2174802010168.ui.theme.KiemTra_LapTrinhUngDungDiDong_2174802010168Theme
+import android.util.Patterns
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : ComponentActivity() {
+class LoginActivity : AppCompatActivity() {
+
+    private lateinit var edtEmail: EditText
+    private lateinit var edtPassword: EditText
+    private lateinit var btnLogin: Button
+    private lateinit var tvStatus: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            KiemTra_LapTrinhUngDungDiDong_2174802010168Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_login)
+
+        // Ánh xạ bằng findViewById (không dùng ViewBinding)
+        edtEmail = findViewById(R.id.edtEmail)
+        edtPassword = findViewById(R.id.edtPassword)
+        btnLogin = findViewById(R.id.btnLogin)
+        tvStatus = findViewById(R.id.tvStatus)
+
+        btnLogin.setOnClickListener {
+            val email = edtEmail.text.toString().trim()
+            val password = edtPassword.text.toString()
+
+            when {
+                email.isEmpty() && password.isEmpty() ->
+                    showError("Vui lòng nhập Email và Mật khẩu!")
+                email.isEmpty() ->
+                    showError("Email không được để trống!")
+                password.isEmpty() ->
+                    showError("Mật khẩu không được để trống!")
+                !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->
+                    showError("Email không đúng định dạng!")
+                password.length < 6 ->
+                    showError("Mật khẩu phải có ít nhất 6 ký tự!")
+                else -> {
+                    tvStatus.setTextColor(Color.parseColor("#2E7D32"))
+                    tvStatus.text = "Xác thực thành công!"
                 }
             }
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    KiemTra_LapTrinhUngDungDiDong_2174802010168Theme {
-        Greeting("Android")
+    private fun showError(message: String) {
+        tvStatus.setTextColor(Color.RED)
+        tvStatus.text = message
     }
 }
